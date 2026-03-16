@@ -1,0 +1,8 @@
+platforms:
+  linkedin: true
+  bluesky: true
+
+tone: thoughtful and professional
+topic: AI tooling, agents, infrastructure, developer workflows, automation
+
+max_posts_per_day: 1
