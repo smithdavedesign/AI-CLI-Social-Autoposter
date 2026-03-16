@@ -1,6 +1,6 @@
 platforms:
   linkedin: false
-  bluesky: false
+  bluesky: true
 
 tone: thoughtful and professional
 topic: AI tooling, agents, infrastructure, developer workflows, automation
