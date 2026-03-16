@@ -17,7 +17,7 @@ export async function generatePost(
     messages: [
       {
         role: 'user',
-        content: `Write a post about this topic: "${topic}"\n\nTone: ${config.tone}\nMax length: 150 words\n\nOutput only the post text — no title, no label, no explanation.`,
+        content: `Write a post about this topic: "${topic}"\n\nTone: ${config.tone}\nMax length: 150 words\n\nAt the end of the post, add 3-5 relevant hashtags on a new line. Choose from topics like: #AI #AIAgents #LLM #DevTools #DeveloperExperience #MLOps #Automation #SoftwareEngineering #EngineeringLeadership #TechLeadership #GenerativeAI — pick only the ones that genuinely fit the post.\n\nOutput only the post text and hashtags — no title, no label, no explanation.`,
       },
     ],
   });

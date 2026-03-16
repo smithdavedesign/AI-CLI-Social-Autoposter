@@ -17,31 +17,33 @@ export class LinkedInAdapter implements PlatformAdapter {
       let status: number;
       try {
         const response = await axios.post(
-          'https://api.linkedin.com/v2/ugcPosts',
+          'https://api.linkedin.com/rest/posts',
           {
             author: this.personUrn,
+            commentary: content,
+            visibility: 'PUBLIC',
+            distribution: {
+              feedDistribution: 'MAIN_FEED',
+              targetEntities: [],
+              thirdPartyDistributionChannels: [],
+            },
             lifecycleState: 'PUBLISHED',
-            specificContent: {
-              'com.linkedin.ugc.ShareContent': {
-                shareCommentary: { text: content, attributes: [] },
-                shareMediaCategory: 'NONE',
-                media: [],
-              },
-            },
-            visibility: {
-              'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC',
-            },
+            isReshareDisabledByAuthor: false,
           },
           {
             headers: {
               Authorization: `Bearer ${this.accessToken}`,
               'Content-Type': 'application/json',
               'X-Restli-Protocol-Version': '2.0.0',
+              'LinkedIn-Version': '202504',
             },
-            validateStatus: () => true, // handle all status codes manually
+            validateStatus: () => true,
           }
         );
         status = response.status;
+        if (status !== 201) {
+          logger.info(`LinkedIn error body: ${JSON.stringify(response.data)}`);
+        }
       } catch (err) {
         throw new Error(`LinkedIn request failed: ${err instanceof Error ? err.message : String(err)}`);
       }
