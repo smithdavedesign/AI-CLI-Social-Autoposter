@@ -1,0 +1,40 @@
+name: Social Post
+
+on:
+  schedule:
+    # Runs 5x per week at varied times (UTC) — Mon/Tue/Wed/Fri/Sat
+    - cron: '17 14 * * 1'   # Mon  9:17am ET
+    - cron: '44 17 * * 2'   # Tue 12:44pm ET
+    - cron: '08 20 * * 3'   # Wed  3:08pm ET
+    - cron: '31 16 * * 5'   # Fri 11:31am ET
+    - cron: '52 19 * * 6'   # Sat  2:52pm ET
+  workflow_dispatch:         # manual trigger from GitHub UI
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Random delay (0–45 min) to avoid predictable timing
+        run: sleep $((RANDOM % 2700))
+
+      - name: Run post
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          LINKEDIN_PERSON_URN: ${{ secrets.LINKEDIN_PERSON_URN }}
+        run: node dist/index.js run
